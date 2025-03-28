@@ -31,7 +31,7 @@ const App = () => (
               </ProtectedRoute>
             } />
             <Route path="/profile" element={
-              <ProtectedRoute>
+              <ProtectedRoute guestAllowed={false}>
                 <Profile />
               </ProtectedRoute>
             } />

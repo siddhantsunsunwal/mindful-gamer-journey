@@ -5,10 +5,11 @@ import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
   children: ReactNode;
+  guestAllowed?: boolean;
 }
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, loading } = useAuth();
+const ProtectedRoute = ({ children, guestAllowed = true }: ProtectedRouteProps) => {
+  const { user, loading, isGuest } = useAuth();
 
   if (loading) {
     return (
@@ -18,11 +19,12 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     );
   }
 
-  if (!user) {
-    return <Navigate to="/auth" replace />;
+  // Allow access if user is logged in or guest mode is allowed and active
+  if (user || (guestAllowed && isGuest)) {
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  return <Navigate to="/auth" replace />;
 };
 
 export default ProtectedRoute;
